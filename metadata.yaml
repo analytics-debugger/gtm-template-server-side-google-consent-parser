@@ -15,5 +15,5 @@
 homepage: "https://www.analytics-debugger.com"
 documentation: "https://www.analytics-debugger.com"
 versions:
-  - sha: 5f02a788b90ae804f86b04aa24af8937e567874a
+  - sha: db8ba9b0840a78514d1ff0bbff19a4eeb1bdfe8e
     changeNotes: Initial release.
