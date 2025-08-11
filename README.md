@@ -112,7 +112,6 @@ String:    1   3  r   3  r   3  r   3  r   5        1  l
 ## Parsing Logic for Your Template
 
 ```javascript
-// For string: "13r3r3r3r5l1"
 
 consentString.substring(1, 3) → "3r" → pair[1] = 'r'  // ad_storage
 consentString.substring(3, 5) → "3r" → pair[1] = 'r'  // analytics_storage  
