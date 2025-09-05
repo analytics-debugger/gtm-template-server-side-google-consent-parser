@@ -10,16 +10,23 @@ ___INFO___
 
 {
   "type": "MACRO",
-  "id": "cvt_temp_public_id",
+  "id": "cvt_MKBWT",
   "version": 1,
-  "securityGroups": [],
   "displayName": "Google Consent Parser",
-  "categories": ["AFFILIATE_MARKETING", "ADVERTISING", "ATTRIBUTION", "ANALYTICS", "UTILITY"],
+  "categories": [
+    "AFFILIATE_MARKETING",
+    "ADVERTISING",
+    "ATTRIBUTION",
+    "ANALYTICS",
+    "UTILITY"
+  ],
   "description": "Variable template to parse Google\u0027s Consent String into a readable format.",
   "containerContexts": [
     "SERVER"
-  ]
+  ],
+  "securityGroups": []
 }
+
 
 ___TEMPLATE_PARAMETERS___
 
@@ -60,15 +67,44 @@ ___TEMPLATE_PARAMETERS___
     "macrosInSelect": false,
     "selectItems": [
       {
-        "value": "returnObject",
+        "value": "object",
         "displayValue": "Object"
       },
       {
-        "value": "returnString",
+        "value": "string",
         "displayValue": "String"
       }
     ],
-    "simpleValueType": true
+    "simpleValueType": true,
+    "enablingConditions": [
+      {
+        "paramName": "consentCategory",
+        "paramValue": "all",
+        "type": "NOT_EQUALS"
+      }
+    ],
+    "help": "When \"All\" categories are selected, only the Object output format will be available."
+  },
+  {
+    "type": "SELECT",
+    "name": "outputFormat_all",
+    "displayName": "Output Format",
+    "macrosInSelect": false,
+    "selectItems": [
+      {
+        "value": "object",
+        "displayValue": "Object"
+      }
+    ],
+    "simpleValueType": true,
+    "enablingConditions": [
+      {
+        "paramName": "consentCategory",
+        "paramValue": "all",
+        "type": "EQUALS"
+      }
+    ],
+    "help": "When \"All\" categories are selected, only the Object output format will be available."
   }
 ]
 
@@ -89,22 +125,24 @@ const BASE64URL_INDEX = BASE64URL.split('').reduce((acc, char, index) => {
   return acc;
 }, {});
 
+const calculatedOutputformat = data.outputFormat_all || data.outputFormat;
+
 const parseValue = (value) => {
   const valueMap = { 1: '-', 2: 'denied', 3: 'granted' };
   return valueMap[value] || '-';
 };
 
 const parseConsentBlock = (pair) => {
-  // First chars defined implicit consent, we look for the explicit part
+  // First chars define implicit consent, we look for the explicit part
   const explicitConsentState = BASE64URL_INDEX[pair[1]];        
   const defaultVal = (explicitConsentState >> 2) & 3;
   const updateVal = explicitConsentState & 3;
-  if(data.outputFormat === "object"){
+  if(calculatedOutputformat === "object"){
     return {
       default: parseValue(defaultVal),
       update: parseValue(updateVal)
     };
-  }else if(data.outputFormat === "string"){
+  }else if(calculatedOutputformat === "string"){
     return 'default:'+parseValue(defaultVal)+'|update:'+parseValue(updateVal);
   }else{
      return null;
@@ -194,6 +232,7 @@ ___SERVER_PERMISSIONS___
   }
 ]
 
+
 ___TESTS___
 
 scenarios:
@@ -214,7 +253,6 @@ scenarios:
     assertThat(variableResult).isNotEqualTo(undefined);
     assertThat(variableResult.ad_storage).isNotEqualTo(undefined);
     assertThat(variableResult.analytics_storage).isNotEqualTo(undefined);
-
 - name: Test with valid consent string - single category
   code: |-
     mock('getRequestQueryParameter', (param) => {
@@ -231,7 +269,6 @@ scenarios:
 
     assertThat(variableResult).isNotEqualTo(undefined);
     assertThat(variableResult).isNotEqualTo(false);
-
 - name: Test with no gcd parameter
   code: |-
     mock('getRequestQueryParameter', (param) => {
@@ -246,7 +283,6 @@ scenarios:
     let variableResult = runCode(mockData);
 
     assertThat(variableResult).isEqualTo(false);
-
 - name: Test string vs object output format
   code: |-
     mock('getRequestQueryParameter', (param) => {
@@ -271,6 +307,7 @@ scenarios:
     assertThat(stringResult).isNotEqualTo(undefined);
     assertThat(typeof objectResult).isEqualTo('object');
     assertThat(typeof stringResult).isEqualTo('string');
+
 
 ___NOTES___
 
