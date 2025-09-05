@@ -15,5 +15,12 @@
 homepage: "https://www.analytics-debugger.com"
 documentation: "https://www.analytics-debugger.com"
 versions:
+  # Latest version
+  - sha: 7c22e4ca1119fac904b55839b73744e6c586f667
+    changeNotes: |2
+      Fix output format values.
+      Prevent String mode on All Categories selected.
   - sha: db8ba9b0840a78514d1ff0bbff19a4eeb1bdfe8e
     changeNotes: Initial release.
+
+    
