@@ -16,7 +16,7 @@ homepage: "https://www.analytics-debugger.com"
 documentation: "https://thyngster.com/gtm-template-consent-string-parser"
 versions:
   # Latest version
-  - sha: 813da0e20bf4409202ce08b65b7fcf569e9a9d15
+  - sha: 4a35a05c3912ca1ebbda8d4322c5b34956e1bb84
     changeNotes: |2
       Decode the full consent decision chain (implicit, declare, default, update).
       Add effective consent (follows delegation), delegated and container scoped values.
