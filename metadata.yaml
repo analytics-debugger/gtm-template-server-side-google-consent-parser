@@ -13,9 +13,16 @@
 # limitations under the License.
 
 homepage: "https://www.analytics-debugger.com"
-documentation: "https://www.analytics-debugger.com"
+documentation: "https://thyngster.com/gtm-template-consent-string-parser"
 versions:
   # Latest version
+  - sha: 813da0e20bf4409202ce08b65b7fcf569e9a9d15
+    changeNotes: |2
+      Decode the full consent decision chain (implicit, declare, default, update).
+      Add effective consent (follows delegation), delegated and container scoped values.
+      Add Consent Mode Active, Global Privacy Control and Ads Signals options, and Raw Details.
+      Add Source field: GCD Parameter or a custom value / variable.
+      Existing variables keep working without changes.
   - sha: 7c22e4ca1119fac904b55839b73744e6c586f667
     changeNotes: |2
       Fix output format values.
